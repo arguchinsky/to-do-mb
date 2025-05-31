@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { type SyntheticEvent, useMemo, useState } from 'react';
 import { Container, List, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { Item } from './classes/Item/Item.ts';
 import { InputField } from './ui/InputField/InputField.tsx';
@@ -8,21 +8,11 @@ import type { IItem } from './classes/Item/interfaces';
 
 import './App.css';
 
-type Tab = {
-  id: number;
-  label: string;
-};
-
-const tabsMap = ['all', 'active', 'done'];
-
 function App() {
   const [todos, setTodos] = useState<IItem[]>([]);
-  const [tab, setTab] = useState<Tab>({
-    id: 0,
-    label: 'all',
-  });
+  const [tab, setTab] = useState<string>('all');
 
-  const preparedList = useMemo<IItem[]>(() => getPreparedToDoList(todos, tab.label), [todos, tab]);
+  const preparedList = useMemo<IItem[]>(() => getPreparedToDoList(todos, tab), [todos, tab]);
 
   const handleAddValue = (value: string) => {
     setTodos((prev) => [new Item(todos.length + 1, value), ...prev]);
@@ -40,6 +30,10 @@ function App() {
     );
   };
 
+  const handleOnTabChange = (_: SyntheticEvent<Element, Event>, value: string) => {
+    setTab(value);
+  };
+
   return (
     <Container
       maxWidth='lg'
@@ -52,34 +46,53 @@ function App() {
       <Typography variant='h1'>ToDos</Typography>
       <InputField addValue={handleAddValue} />
       <Stack direction='row'>
-        <Tabs
-          orientation='vertical'
-          value={tab.id}
-          onChange={(_, value) => {
-            setTab({
-              id: value,
-              label: tabsMap[value],
-            });
-          }}
-        >
-          <Tab label='All' id='all' />
-          <Tab label='Active' id='active' />
-          <Tab label='Done' id='done' />
+        <Tabs orientation='vertical' value={tab} onChange={handleOnTabChange}>
+          <Tab
+            label='All'
+            value={'all'}
+            sx={{
+              textTransform: 'capitalize',
+              alignItems: 'start',
+            }}
+          />
+          <Tab
+            label='Active'
+            value={'active'}
+            sx={{
+              textTransform: 'capitalize',
+              alignItems: 'start',
+            }}
+          />
+          <Tab
+            label='Done'
+            value={'done'}
+            sx={{
+              textTransform: 'capitalize',
+              alignItems: 'start',
+            }}
+          />
         </Tabs>
         <List
           sx={{
             display: 'flex',
             flexDirection: 'column',
+            justifyContent: preparedList.length ? 'start' : 'center',
             gap: '4px',
             flex: 1,
-            maxHeight: 'calc(90vh - 300px)',
+            height: 'calc(90vh - 300px)',
             overflow: 'auto',
             padding: '8px',
           }}
         >
-          {preparedList.map((item) => (
-            <AppListItem key={item.id} {...item} onChange={handleCompleteItem} />
-          ))}
+          {preparedList.length ? (
+            preparedList.map((item) => (
+              <AppListItem key={item.id} {...item} onChange={handleCompleteItem} />
+            ))
+          ) : (
+            <Typography variant='h4' color='textDisabled'>
+              No items
+            </Typography>
+          )}
         </List>
       </Stack>
       <Typography color='textDisabled'>Test app for the Mindbox</Typography>
