@@ -1,41 +1,14 @@
-import { type SyntheticEvent, useMemo, useState } from 'react';
 import { Container, List, Stack, Tab, Tabs, Typography } from '@mui/material';
-import { Item } from './classes/Item/Item.ts';
+import { useAppState } from './hooks/useAppState/useAppState.ts';
 import { InputField } from './ui/InputField/InputField.tsx';
 import { AppListItem } from './ui/AppListItem/AppListItem.tsx';
-import { getCounters } from './utils/getCounters/getCounters.ts';
-import { getPreparedToDoList } from './utils/getPreparedToDoList/getPreparedToDoList.ts';
-import type { IItem } from './classes/Item/interfaces';
 
 import './App.css';
 import { appStyles } from './styles.ts';
 
 function App() {
-  const [todos, setTodos] = useState<IItem[]>([]);
-  const [tab, setTab] = useState<string>('all');
-
-  const preparedList = useMemo<IItem[]>(() => getPreparedToDoList(todos, tab), [todos, tab]);
-  const counters = useMemo<Record<string, number>>(() => getCounters(todos), [todos]);
-
-  const handleAddValue = (value: string) => {
-    setTodos((prev) => [new Item(todos.length + 1, value), ...prev]);
-  };
-
-  const handleCompleteItem = (id: number) => {
-    const updatedTodos = todos.map((item) => {
-      if (item.id === id) {
-        item.changeState();
-      }
-
-      return item;
-    });
-
-    setTodos(updatedTodos);
-  };
-
-  const handleOnTabChange = (_: SyntheticEvent<Element, Event>, value: string) => {
-    setTab(value);
-  };
+  const { tab, preparedList, counters, handleAddValue, handleCompleteItem, handleOnTabChange } =
+    useAppState();
 
   return (
     <Container maxWidth='lg' sx={appStyles.container}>

@@ -1,4 +1,4 @@
-import { type ChangeEvent, type FC, useState, memo, type KeyboardEventHandler } from 'react';
+import { type ChangeEvent, type FC, useState, memo, type KeyboardEvent } from 'react';
 import { TextField } from '@mui/material';
 import type { TInputField } from './types';
 
@@ -9,7 +9,7 @@ export const InputField: FC<TInputField> = memo(({ addValue }) => {
     setInputValue(value);
   };
 
-  const handleKeyUp = (event: KeyboardEventHandler<HTMLDivElement> | undefined) => {
+  const handleKeyUp = (event: KeyboardEvent<HTMLDivElement> | undefined) => {
     if (event?.key === 'Enter' && inputValue) {
       addValue(inputValue);
       setInputValue('');
