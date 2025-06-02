@@ -3,6 +3,7 @@ import { Container, List, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { Item } from './classes/Item/Item.ts';
 import { InputField } from './ui/InputField/InputField.tsx';
 import { AppListItem } from './ui/AppListItem/AppListItem.tsx';
+import { getCounters } from './utils/getCounters/getCounters.ts';
 import { getPreparedToDoList } from './utils/getPreparedToDoList/getPreparedToDoList.ts';
 import type { IItem } from './classes/Item/interfaces';
 
@@ -13,21 +14,22 @@ function App() {
   const [tab, setTab] = useState<string>('all');
 
   const preparedList = useMemo<IItem[]>(() => getPreparedToDoList(todos, tab), [todos, tab]);
+  const counters = useMemo<Record<string, number>>(() => getCounters(todos), [todos]);
 
   const handleAddValue = (value: string) => {
     setTodos((prev) => [new Item(todos.length + 1, value), ...prev]);
   };
 
   const handleCompleteItem = (id: number) => {
-    setTodos(
-      todos.map((item) => {
-        if (item.id === id) {
-          item.changeState();
-        }
+    const updatedTodos = todos.map((item) => {
+      if (item.id === id) {
+        item.changeState();
+      }
 
-        return item;
-      }),
-    );
+      return item;
+    });
+
+    setTodos(updatedTodos);
   };
 
   const handleOnTabChange = (_: SyntheticEvent<Element, Event>, value: string) => {
@@ -49,7 +51,7 @@ function App() {
         <Tabs orientation='vertical' value={tab} onChange={handleOnTabChange}>
           <Tab
             label='All'
-            value={'all'}
+            value='all'
             sx={{
               textTransform: 'capitalize',
               alignItems: 'start',
@@ -57,7 +59,7 @@ function App() {
           />
           <Tab
             label='Active'
-            value={'active'}
+            value='active'
             sx={{
               textTransform: 'capitalize',
               alignItems: 'start',
@@ -65,7 +67,7 @@ function App() {
           />
           <Tab
             label='Done'
-            value={'done'}
+            value='done'
             sx={{
               textTransform: 'capitalize',
               alignItems: 'start',
@@ -95,6 +97,9 @@ function App() {
           )}
         </List>
       </Stack>
+      <Typography alignSelf='start'>
+        All: {counters.all} | Active: {counters.active} | Done: {counters.done}
+      </Typography>
       <Typography color='textDisabled'>Test app for the Mindbox</Typography>
     </Container>
   );
