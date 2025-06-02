@@ -8,6 +8,7 @@ import { getPreparedToDoList } from './utils/getPreparedToDoList/getPreparedToDo
 import type { IItem } from './classes/Item/interfaces';
 
 import './App.css';
+import { appStyles } from './styles.ts';
 
 function App() {
   const [todos, setTodos] = useState<IItem[]>([]);
@@ -37,53 +38,19 @@ function App() {
   };
 
   return (
-    <Container
-      maxWidth='lg'
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '12px',
-      }}
-    >
+    <Container maxWidth='lg' sx={appStyles.container}>
       <Typography variant='h1'>ToDos</Typography>
       <InputField addValue={handleAddValue} />
       <Stack direction='row'>
         <Tabs orientation='vertical' value={tab} onChange={handleOnTabChange}>
-          <Tab
-            label='All'
-            value='all'
-            sx={{
-              textTransform: 'capitalize',
-              alignItems: 'start',
-            }}
-          />
-          <Tab
-            label='Active'
-            value='active'
-            sx={{
-              textTransform: 'capitalize',
-              alignItems: 'start',
-            }}
-          />
-          <Tab
-            label='Done'
-            value='done'
-            sx={{
-              textTransform: 'capitalize',
-              alignItems: 'start',
-            }}
-          />
+          <Tab label='All' value='all' sx={appStyles.tab} />
+          <Tab label='Active' value='active' sx={appStyles.tab} />
+          <Tab label='Done' value='done' sx={appStyles.tab} />
         </Tabs>
         <List
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
+            ...appStyles.list,
             justifyContent: preparedList.length ? 'start' : 'center',
-            gap: '4px',
-            flex: 1,
-            height: 'calc(90vh - 300px)',
-            overflow: 'auto',
-            padding: '8px',
           }}
         >
           {preparedList.length ? (
