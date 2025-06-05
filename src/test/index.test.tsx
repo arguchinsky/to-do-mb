@@ -63,7 +63,7 @@ describe('App component', () => {
     const task1 = screen.getByTestId(`${DATA_TEST_ID_START}${defaultState.preparedList[0].id}`);
     fireEvent.click(task1);
 
-    expect(mockHandleCompleteItem).toHaveBeenCalledWith('1');
+    expect(mockHandleCompleteItem).toHaveBeenCalledWith(1);
   });
 
   it('show "No items", if the list is empty', () => {
