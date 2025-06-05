@@ -1,5 +1,6 @@
 import { type ChangeEvent, type FC, useState, memo, type KeyboardEvent } from 'react';
 import { TextField } from '@mui/material';
+import { INPUT_DATA_TEST_ID, INPUT_LABEL } from './constants';
 import type { TInputField } from './types';
 
 export const InputField: FC<TInputField> = memo(({ addValue }) => {
@@ -18,12 +19,12 @@ export const InputField: FC<TInputField> = memo(({ addValue }) => {
 
   return (
     <TextField
-      data-test-id='app-input'
+      data-test-id={INPUT_DATA_TEST_ID}
       value={inputValue}
       onChange={handleChange}
       onKeyUp={handleKeyUp}
       type='text'
-      label='Add another task'
+      label={INPUT_LABEL}
     />
   );
 });

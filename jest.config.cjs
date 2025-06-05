@@ -3,6 +3,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
     '^@emotion/react$': require.resolve('@emotion/react'),
     '^@emotion/styled$': require.resolve('@emotion/styled'),
     '^@mui/material$': require.resolve('@mui/material'),
