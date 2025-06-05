@@ -18,6 +18,7 @@ export const InputField: FC<TInputField> = memo(({ addValue }) => {
 
   return (
     <TextField
+      data-test-id='app-input'
       value={inputValue}
       onChange={handleChange}
       onKeyUp={handleKeyUp}
