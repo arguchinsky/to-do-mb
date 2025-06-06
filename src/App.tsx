@@ -3,6 +3,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppState } from './hooks/useAppState/useAppState.ts';
 import { InputField } from './ui/InputField/InputField.tsx';
 import { AppListItem } from './ui/AppListItem/AppListItem.tsx';
+import { CONTAINER_DATA_TEST_ID, DELETE_ICON_DATA_TEST_ID } from './constants';
 
 import './App.css';
 import { appStyles } from './styles.ts';
@@ -19,7 +20,7 @@ function App() {
   } = useAppState();
 
   return (
-    <Container maxWidth='lg' sx={appStyles.container}>
+    <Container data-test-id={CONTAINER_DATA_TEST_ID} maxWidth='lg' sx={appStyles.container}>
       <Typography variant='h1'>ToDos</Typography>
       <InputField addValue={handleAddValue} />
       <Stack direction='row'>
@@ -46,7 +47,11 @@ function App() {
         </List>
       </Stack>
       <Stack direction='row' alignItems='center' gap='4px'>
-        <DeleteIcon sx={appStyles.clear} onClick={handleClearList} />
+        <DeleteIcon
+          data-test-id={DELETE_ICON_DATA_TEST_ID}
+          sx={appStyles.clear}
+          onClick={handleClearList}
+        />
         <Typography alignSelf='start'>
           All: {counters.all} | Active: {counters.active} | Done: {counters.done}
         </Typography>

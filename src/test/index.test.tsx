@@ -1,7 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import App from '../App';
 import { useAppState } from '../hooks/useAppState/useAppState.ts';
 import { DATA_TEST_ID_START } from '../ui/AppListItem/constants';
+import { DELETE_ICON_DATA_TEST_ID } from '../constants';
+import App from '../App';
 
 jest.mock('../hooks/useAppState/useAppState.ts', () => ({
   useAppState: jest.fn(),
@@ -11,6 +12,7 @@ describe('App component', () => {
   const mockHandleAddValue = jest.fn();
   const mockHandleCompleteItem = jest.fn();
   const mockHandleOnTabChange = jest.fn();
+  const mockHandleClearList = jest.fn();
 
   const defaultState = {
     tab: 'all',
@@ -22,6 +24,7 @@ describe('App component', () => {
     handleAddValue: mockHandleAddValue,
     handleCompleteItem: mockHandleCompleteItem,
     handleOnTabChange: mockHandleOnTabChange,
+    handleClearList: mockHandleClearList,
   };
 
   beforeEach(() => {
@@ -35,7 +38,7 @@ describe('App component', () => {
     expect(screen.getByText('Test app for the Mindbox')).toBeInTheDocument();
   });
 
-  it('render InputFiled', () => {
+  it('render InputField', () => {
     render(<App />);
     expect(screen.getByTestId('app-input')).toBeInTheDocument();
   });
@@ -87,5 +90,48 @@ describe('App component', () => {
     const activeTab = screen.getByRole('tab', { name: 'Active' });
     fireEvent.click(activeTab);
     expect(mockHandleOnTabChange).toHaveBeenCalled();
+  });
+
+  it('render delete icon with correct test id', () => {
+    render(<App />);
+    const deleteIcon = screen.getByTestId(DELETE_ICON_DATA_TEST_ID);
+    expect(deleteIcon).toBeInTheDocument();
+  });
+
+  it('call handleClearList when delete icon is clicked', () => {
+    render(<App />);
+    const deleteIcon = screen.getByTestId(DELETE_ICON_DATA_TEST_ID);
+    fireEvent.click(deleteIcon);
+    expect(mockHandleClearList).toHaveBeenCalled();
+  });
+
+  it('render list with correct styles when empty', () => {
+    (useAppState as jest.Mock).mockReturnValue({
+      ...defaultState,
+      preparedList: [],
+    });
+
+    render(<App />);
+    const list = screen.getByRole('list');
+    expect(list).toHaveStyle('justify-content: center');
+  });
+
+  it('render list with correct styles when not empty', () => {
+    render(<App />);
+    const list = screen.getByRole('list');
+    expect(list).toHaveStyle('justify-content: start');
+  });
+
+  it('render correct number of list items', () => {
+    render(<App />);
+    const listItems = screen.getAllByRole('listitem');
+    expect(listItems).toHaveLength(defaultState.preparedList.length);
+  });
+
+  it('render AppListItem with correct props', () => {
+    render(<App />);
+    const firstItem = defaultState.preparedList[0];
+    const itemElement = screen.getByText(firstItem.value);
+    expect(itemElement).toBeInTheDocument();
   });
 });
