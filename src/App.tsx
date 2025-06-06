@@ -1,4 +1,5 @@
 import { Container, List, Stack, Tab, Tabs, Typography } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppState } from './hooks/useAppState/useAppState.ts';
 import { InputField } from './ui/InputField/InputField.tsx';
 import { AppListItem } from './ui/AppListItem/AppListItem.tsx';
@@ -7,8 +8,15 @@ import './App.css';
 import { appStyles } from './styles.ts';
 
 function App() {
-  const { tab, preparedList, counters, handleAddValue, handleCompleteItem, handleOnTabChange } =
-    useAppState();
+  const {
+    tab,
+    preparedList,
+    counters,
+    handleAddValue,
+    handleCompleteItem,
+    handleOnTabChange,
+    handleClearList,
+  } = useAppState();
 
   return (
     <Container maxWidth='lg' sx={appStyles.container}>
@@ -37,9 +45,12 @@ function App() {
           )}
         </List>
       </Stack>
-      <Typography alignSelf='start'>
-        All: {counters.all} | Active: {counters.active} | Done: {counters.done}
-      </Typography>
+      <Stack direction='row' alignItems='center' gap='4px'>
+        <DeleteIcon sx={appStyles.clear} onClick={handleClearList} />
+        <Typography alignSelf='start'>
+          All: {counters.all} | Active: {counters.active} | Done: {counters.done}
+        </Typography>
+      </Stack>
       <Typography color='textDisabled'>Test app for the Mindbox</Typography>
     </Container>
   );

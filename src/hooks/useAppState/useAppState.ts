@@ -34,6 +34,10 @@ export const useAppState = (): TAppState => {
     setTab(value);
   };
 
+  const handleClearList = () => {
+    setTodos([]);
+  };
+
   const saveData = () => {
     localStorage.setItem(APP_LS_NAME, JSON.stringify(todos));
   };
@@ -57,5 +61,6 @@ export const useAppState = (): TAppState => {
     handleAddValue,
     handleCompleteItem,
     handleOnTabChange,
+    handleClearList,
   };
 };

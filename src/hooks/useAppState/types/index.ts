@@ -9,4 +9,5 @@ export type TAppState = {
   handleAddValue: (value: string) => void;
   handleCompleteItem: (id: number) => void;
   handleOnTabChange: (_: SyntheticEvent<Element, Event>, value: string) => void;
+  handleClearList: VoidFunction;
 };
